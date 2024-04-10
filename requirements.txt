@@ -1,5 +1,5 @@
 transformers
-huggingface_hub
+numexpr
 langchain
 langchain-community
 langchain-openai
