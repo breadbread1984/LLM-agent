@@ -1,6 +1,7 @@
 #!/usr/bin/python3
 
 from os import environ
+from huggingface_hub import login
 from langchain import hub
 from langchain.llms import HuggingFaceEndpoint, OpenAI
 from langchain_openai import ChatOpenAI
@@ -19,6 +20,7 @@ class Agent(object):
                         'OpenHermes-2.5-Mistral-7B',
                         'HuggingFaceH4/zephyr-7b-beta',
                         'SOLAR-10.7B-Instruct-v1.0'}
+    login(token = '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')
     environ["HUGGINGFACEHUB_API_TOKEN"] = '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'
     environ["SERPAPI_API_KEY"] = '052741ba82a96e21b3c3ab35e6c5288f470a11402bc83a9cc86c306f826d24f0'
     if model_id == 'text-davinci-003':
