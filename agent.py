@@ -33,7 +33,7 @@ class Agent(object):
     agent = {"input": lambda x: x["input"], "agent_scratchpad": lambda x: format_log_to_str(x["intermediate_steps"])} | prompt | chat_model.bind(stop = ["\nObservation"]) | ReActJsonSingleInputOutputParser()
     self.agent_executor = AgentExecutor(agent = agent, tools = tools, verbose = True)
   def query(self, question):
-    return self.aget_executor.invoke({"input": question})
+    return self.agent_executor.invoke({"input": question})
 
 if __name__ == "__main__":
   agent = Agent(model_id = 'meta-llama/Llama-2-70b-chat-hf')
