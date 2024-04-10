@@ -1,6 +1,5 @@
 #!/usr/bin/python3
 
-from huggingface_hub import login
 from langchain import hub
 from langchain.llms import HuggingFaceEndpoint, OpenAI
 from langchain_openai import ChatOpenAI
@@ -19,12 +18,11 @@ class Agent(object):
                         'OpenHermes-2.5-Mistral-7B',
                         'HuggingFaceH4/zephyr-7b-beta',
                         'SOLAR-10.7B-Instruct-v1.0'}
-    login(token = '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')
     if model_id == 'text-davinci-003':
       llm = OpenAI(model_name = model_id, temperature = 0)
       chat_model = ChatOpenAI(llm = llm)
     else:
-      llm = HuggingFaceEndpoint(repo_id = model_id)
+      llm = HuggingFaceEndpoint(repo_id = model_id, token = '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')
       chat_model = ChatHuggingFace(llm = llm)
     tools = load_tools(tools, llm = llm)
     prompt = hub.pull("hwchase17/react-json")
@@ -35,5 +33,5 @@ class Agent(object):
     return self.aget_executor.invoke({"input": question})
 
 if __name__ == "__main__":
-  agent = Agent()
+  agent = Agent(model_id = 'meta-llama/Llama-2-70b-chat-hf')
   print(agent.query("who is Jinping Xi's daughter?"))
