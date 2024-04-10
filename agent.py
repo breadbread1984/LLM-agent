@@ -11,25 +11,20 @@ from langchain.agents.format_scratchpad import format_log_to_str
 from langchain.agents.output_parsers import ReActJsonSingleInputOutputParser
 from langchain.tools.render import render_text_description
 from langchain_community.utilities import SerpAPIWrapper
+from models import ChatGLM3, Llama2, Zephyr
 
 class Agent(object):
-  def __init__(self, model_id = 'HuggingFaceH4/zephyr-7b-beta', tools = ["google-serper", "llm-math", "serpapi"]):
-    assert model_id in {'text-davinci-003',
-                        'meta-llama/Llama-2-70b-chat-hf',
-                        'meta-llama/Llama-2-7b-chat-hf',
-                        'mistralai/Mixtral-8x7B-Instruct-v0.1',
-                        'OpenHermes-2.5-Mistral-7B',
-                        'HuggingFaceH4/zephyr-7b-beta',
-                        'SOLAR-10.7B-Instruct-v1.0'}
-    login(token = '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')
-    environ["HUGGINGFACEHUB_API_TOKEN"] = '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'
-    environ["HF_TOKEN"] = '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'
+  def __init__(self, model = 'zephyr', tools = ["google-serper", "llm-math", "serpapi"], device = 'cuda'):
+    assert device in {'cpu', 'cuda'}
+    hf_model_list = {'chatglm3': ChatGLM3,
+                     'llama2': Llama2,
+                     'zephyr': Zephyr}
     environ["SERPAPI_API_KEY"] = '052741ba82a96e21b3c3ab35e6c5288f470a11402bc83a9cc86c306f826d24f0'
-    if model_id == 'text-davinci-003':
-      llm = OpenAI(model_name = model_id, temperature = 0)
+    if model == 'openai':
+      llm = OpenAI(model_name = 'text-davinci-003', temperature = 0)
       chat_model = ChatOpenAI(llm = llm)
     else:
-      llm = HuggingFaceEndpoint(repo_id = model_id, token = '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')
+      llm = hf_model_list[model](device = device)
       chat_model = ChatHuggingFace(llm = llm)
     tools = load_tools(tools, llm = llm, serper_api_key = '052741ba82a96e21b3c3ab35e6c5288f470a11402bc83a9cc86c306f826d24f0')
     prompt = hub.pull("hwchase17/react-json")
@@ -40,5 +35,5 @@ class Agent(object):
     return self.agent_executor.invoke({"input": question})
 
 if __name__ == "__main__":
-  agent = Agent(model_id = 'meta-llama/Llama-2-7b-chat-hf')
+  agent = Agent(model = 'llama2')
   print(agent.query("who is Jinping Xi's daughter?"))
