@@ -1,5 +1,6 @@
 #!/usr/bin/python3
 
+from os import environ
 from langchain import hub
 from langchain.llms import HuggingFaceEndpoint, OpenAI
 from langchain_openai import ChatOpenAI
@@ -18,6 +19,7 @@ class Agent(object):
                         'OpenHermes-2.5-Mistral-7B',
                         'HuggingFaceH4/zephyr-7b-beta',
                         'SOLAR-10.7B-Instruct-v1.0'}
+    environ["HUGGINGFACEHUB_API_TOKEN"] = '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'
     if model_id == 'text-davinci-003':
       llm = OpenAI(model_name = model_id, temperature = 0)
       chat_model = ChatOpenAI(llm = llm)
