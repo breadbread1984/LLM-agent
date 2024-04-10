@@ -27,7 +27,7 @@ class Agent(object):
     else:
       llm = HuggingFaceEndpoint(repo_id = model_id, token = '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')
       chat_model = ChatHuggingFace(llm = llm)
-    tools = load_tools(tools, llm = llm)
+    tools = load_tools(tools, llm = llm, serper_api_key = '052741ba82a96e21b3c3ab35e6c5288f470a11402bc83a9cc86c306f826d24f0')
     prompt = hub.pull("hwchase17/react-json")
     prompt = prompt.partial(tools = render_text_description(tools), tool_names = ", ".join([t.name for t in tools]))
     agent = {"input": lambda x: x["input"], "agent_scratchpad": lambda x: format_log_to_str(x["intermediate_steps"])} | prompt | chat_model.bind(stop = ["\nObservation"]) | ReActJsonSingleInputOutputParser()
