@@ -16,6 +16,7 @@ class Agent(object):
   def __init__(self, model_id = 'HuggingFaceH4/zephyr-7b-beta', tools = ["google-serper", "llm-math", "serpapi"]):
     assert model_id in {'text-davinci-003',
                         'meta-llama/Llama-2-70b-chat-hf',
+                        'meta-llama/Llama-2-7b-chat-hf',
                         'mistralai/Mixtral-8x7B-Instruct-v0.1',
                         'OpenHermes-2.5-Mistral-7B',
                         'HuggingFaceH4/zephyr-7b-beta',
@@ -38,5 +39,5 @@ class Agent(object):
     return self.agent_executor.invoke({"input": question})
 
 if __name__ == "__main__":
-  agent = Agent(model_id = 'meta-llama/Llama-2-70b-chat-hf')
+  agent = Agent(model_id = 'meta-llama/Llama-2-7b-chat-hf')
   print(agent.query("who is Jinping Xi's daughter?"))
