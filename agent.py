@@ -3,7 +3,7 @@
 from langchain import hub
 from langchain.llms import HuggingFaceEndpoint, OpenAI
 from langchain_openai import ChatOpenAI
-from langchain.chat_models.huggingface import ChatHuggingFace
+from langchain_community.chat_models.huggingface import ChatHuggingFace
 from langchain.agents import AgentExecutor, load_tools
 from langchain.agents.format_scratchpad import format_log_to_str
 from langchain.agents.output_parsers import ReActJsonSingleInputOutputParser
