@@ -3,3 +3,5 @@ numexpr
 langchain
 langchain-community
 langchain-openai
+langchainhub
+google-search-results
