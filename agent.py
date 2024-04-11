@@ -6,7 +6,7 @@ from langchain.llms import HuggingFaceEndpoint, OpenAI
 from langchain.agents import initialize_agent, load_tools
 
 class Agent(object):
-  def __init__(self, model = 'zephyr', tools = ["google_serper", "llm-math"], device = 'cuda'):
+  def __init__(self, model = 'zephyr', tools = ["google-serper", "llm-math"], device = 'cuda'):
     assert device in {'cpu', 'cuda'}
     environ['HUGGINGFACEHUB_API_TOKEN'] = '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'
     hf_model_list = {'chatglm3': 'THUDM/chatglm3-6b',
