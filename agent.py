@@ -15,25 +15,6 @@ from langchain.tools.render import render_text_description
 from langchain_community.utilities import SerpAPIWrapper
 from models import ChatGLM3, Llama2, Zephyr
 
-class CustomizedParser(ConvoOutputParser):
-  def parse(self, text: str):
-    try:
-      return super().parse(text)
-    except Exception:
-      logging.exception("Error parsing LLM output: %s", text)
-      try:
-        response = json.loads(text)
-        if "action" in response and "action_input" in response:
-          action, action_input = response["action"], response["action_input"]
-          if action == "Final Answer":
-            return AgentFinish({"output": action_input}, text)
-          else:
-            return AgentAction(action, action_input, text)
-        else:
-          raise OutputParserException(f"Missing 'action' or 'action_input' in LLM output: {text}")
-      except Exception as e:
-        raise OutputParserException(f"Could not parse LLM output: {text}") from e
-
 class Agent(object):
   def __init__(self, model = 'zephyr', tools = ["llm-math", "serpapi"], device = 'cuda'):
     assert device in {'cpu', 'cuda'}
