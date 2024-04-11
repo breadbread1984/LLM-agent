@@ -18,7 +18,7 @@ class Warper(object):
     return self.agent.query(question)
 
 def main(unused_argv):
-  warper = Warper()
+  warper = Warper(FLAGS.model)
   block = gr.Blocks()
   with block as demo:
     with gr.Row(equal_height = True):
