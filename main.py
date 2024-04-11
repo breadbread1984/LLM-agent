@@ -1,5 +1,6 @@
 #!/usr/bin/python3
 
+import time
 from absl import flags, app
 import gradio as gr
 from agent import Agent
@@ -14,8 +15,13 @@ def add_options():
 class Warper(object):
   def __init__(self, model):
     self.agent = Agent(model)
-  def query(self, question):
-    return self.agent.query(question)
+  def query(self, history):
+    bot_message = self.agent.query(input = history[-1][0])
+    history[-1][1] = ""
+    for character in bot_message:
+      history[-1][1] += str(character)
+      time.sleep(0.03)
+      yield history
 
 def main(unused_argv):
   warper = Warper(FLAGS.model)
@@ -32,7 +38,7 @@ def main(unused_argv):
             submit_btn = gr.Button("发送")
           with gr.Row():
             clear_btn = gr.ClearButton(components = [chatbot], value = "清空问题")
-        submit_btn.click(warper.query, input = [msg, chatbot], outputs = [msg, chatbot])
+        submit_btn.click(lambda user_message, history: ("", history + [[user_message, None]]), input = [msg, chatbot], outputs = [msg, chatbot], queue = False).then(warper.query, chatbot, chatbot)
   gr.close_all()
   demo.launch(server_name = FLAGS.host, server_port = FLAGS.port)
 
