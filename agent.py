@@ -1,6 +1,7 @@
 #!/usr/bin/python3
 
 from os import environ
+from getpass import getpass
 from langchain.memory import ConversationBufferMemory
 from langchain.llms import HuggingFaceEndpoint, OpenAI
 from langchain.agents import initialize_agent, load_tools
@@ -18,7 +19,7 @@ class Agent(object):
     if model == 'openai':
       llm = OpenAI(model_name = 'text-davinci-003',
                    temperature = 0,
-                   openai_api_key = 'to be filled',
+                   openai_api_key = getpass(),
                    openai_organization = 'to be filled')
     else:
       llm = HuggingFaceEndpoint(repo_id = hf_model_list[model],
@@ -30,5 +31,5 @@ class Agent(object):
     return self.agent_chain.run(question)
 
 if __name__ == "__main__":
-  agent = Agent(model = 'chatglm3')
+  agent = Agent(model = 'zephyr')
   print(agent.query("where does the word maelstrom come?"))
