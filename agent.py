@@ -8,13 +8,15 @@ from langchain.agents import initialize_agent, load_tools
 class Agent(object):
   def __init__(self, model = 'zephyr', tools = ["google-serper", "llm-math"], device = 'cuda'):
     assert device in {'cpu', 'cuda'}
+    environ['OPENAI_API_KEY'] = 'to be filled'
+    environ['OPENAI_ORGANIZATION'] = 'HKQAI'
     environ['HUGGINGFACEHUB_API_TOKEN'] = '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'
     environ["SERPAPI_API_KEY"] = 'd075ad1b698043747f232ec1f00f18ee0e7e8663'
     hf_model_list = {'chatglm3': 'THUDM/chatglm3-6b',
                      'llama2': 'meta-llama/Llama-2-7b-chat-hf',
                      'zephyr': "HuggingFaceH4/zephyr-7b-beta",}
     if model == 'openai':
-      llm = OpenAI(model_name = 'text-davinci-003', temperature = 0)
+      llm = OpenAI(model_name = 'text-davinci-003', temperature = 0, openai_api_key = 'to be filled', openai_organization = 'to be filled')
     else:
       llm = HuggingFaceEndpoint(repo_id = hf_model_list[model], token = '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')
     memory = ConversationBufferMemory(memory_key="chat_history")
@@ -24,5 +26,5 @@ class Agent(object):
     return self.agent_chain.run(question)
 
 if __name__ == "__main__":
-  agent = Agent(model = 'zephyr', device = 'cpu')
-  print(agent.query("list famous actors and actress of hong kong."))
+  agent = Agent(model = 'llama2i', device = 'cpu')
+  print(agent.query("where does the word maelstrom come?"))
