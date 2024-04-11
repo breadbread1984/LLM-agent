@@ -16,7 +16,7 @@ class Warper(object):
   def __init__(self, model):
     self.agent = Agent(model)
   def query(self, history):
-    bot_message = self.agent.query(input = history[-1][0])
+    bot_message = self.agent.query(history[-1][0])
     history[-1][1] = ""
     for character in bot_message:
       history[-1][1] += str(character)
