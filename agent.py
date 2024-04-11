@@ -16,9 +16,13 @@ class Agent(object):
                      'llama2': 'meta-llama/Llama-2-7b-chat-hf',
                      'zephyr': "HuggingFaceH4/zephyr-7b-beta",}
     if model == 'openai':
-      llm = OpenAI(model_name = 'text-davinci-003', temperature = 0, openai_api_key = 'to be filled', openai_organization = 'to be filled')
+      llm = OpenAI(model_name = 'text-davinci-003',
+                   temperature = 0,
+                   openai_api_key = 'to be filled',
+                   openai_organization = 'to be filled')
     else:
-      llm = HuggingFaceEndpoint(repo_id = hf_model_list[model], token = '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')
+      llm = HuggingFaceEndpoint(repo_id = hf_model_list[model],
+                                token = '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')
     memory = ConversationBufferMemory(memory_key="chat_history")
     tools = load_tools(tools, llm = llm, serper_api_key = 'd075ad1b698043747f232ec1f00f18ee0e7e8663')
     self.agent_chain = initialize_agent(tools = tools, llm = llm, memory = memory, agent = "zero-shot-react-description", verbose = True)
