@@ -4,7 +4,7 @@ from os import environ
 from getpass import getpass
 from langchain.memory import ConversationBufferMemory
 from langchain.llms import HuggingFaceEndpoint, OpenAI
-from langchain.agents import initialize_agent, load_tools
+from langchain.agents import AgentType, initialize_agent, load_tools
 
 class Agent(object):
   def __init__(self, model = 'zephyr', tools = ["google-serper", "llm-math"]):
@@ -41,10 +41,10 @@ class Agent(object):
       raise Exception('unknown model!')
     memory = ConversationBufferMemory(memory_key="chat_history")
     tools = load_tools(tools, llm = llm, serper_api_key = 'd075ad1b698043747f232ec1f00f18ee0e7e8663')
-    self.agent_chain = initialize_agent(tools = tools, llm = llm, memory = memory, agent = "zero-shot-react-description", verbose = True)
+    self.agent_chain = initialize_agent(tools = tools, llm = llm, memory = memory, agent = AgentType.CHAT_ZERO_SHOT_REACT_DESCRIPTION, verbose = True)
   def query(self, question):
     return self.agent_chain.run(question)
 
 if __name__ == "__main__":
   agent = Agent(model = 'zephyr')
-  print(agent.query("where does the word maelstrom come?"))
+  print(agent.query("what is SwiGLU?"))
