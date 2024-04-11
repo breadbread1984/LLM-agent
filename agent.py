@@ -1,22 +1,11 @@
 #!/usr/bin/python3
 
 from os import environ
-import json
-import logging
-from huggingface_hub import login
-from langchain import hub
 from langchain.llms import HuggingFaceEndpoint, OpenAI
-from langchain_openai import ChatOpenAI
-from langchain_community.chat_models.huggingface import ChatHuggingFace
-from langchain.agents import initialize_agent, AgentExecutor, load_tools
-from langchain.agents.format_scratchpad import format_log_to_str
-from langchain.agents.output_parsers import ReActJsonSingleInputOutputParser
-from langchain.tools.render import render_text_description
-from langchain_community.utilities import SerpAPIWrapper
-from models import ChatGLM3, Llama2, Zephyr
+from langchain.agents import initialize_agent, load_tools
 
 class Agent(object):
-  def __init__(self, model = 'zephyr', tools = ["llm-math", "serpapi"], device = 'cuda'):
+  def __init__(self, model = 'zephyr', tools = ["google_serper", "llm-math"], device = 'cuda'):
     assert device in {'cpu', 'cuda'}
     environ['HUGGINGFACEHUB_API_TOKEN'] = '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'
     hf_model_list = {'chatglm3': 'THUDM/chatglm3-6b',
