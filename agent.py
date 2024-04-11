@@ -7,6 +7,7 @@ from langchain.agents import initialize_agent, load_tools
 
 class Agent(object):
   def __init__(self, model = 'zephyr', tools = ["google-serper", "llm-math"]):
+    # openai is not available in china, cannot singup for an api key
     environ['OPENAI_API_KEY'] = 'to be filled'
     environ['OPENAI_ORGANIZATION'] = 'HKQAI'
     environ['HUGGINGFACEHUB_API_TOKEN'] = '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'
