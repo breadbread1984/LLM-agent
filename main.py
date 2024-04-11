@@ -30,15 +30,15 @@ def main(unused_argv):
     with gr.Row(equal_height = True):
       with gr.Column(scale = 15):
         gr.Markdown("<h1><center>LLM Agent</center></h1>")
-      with gr.Row():
-        with gr.Column(scale = 4):
-          chatbot = gr.Chatbot(height = 450, show_copy_button = True)
-          msg = gr.Textbox(label = '需要问什么？')
-          with gr.Row():
-            submit_btn = gr.Button("发送")
-          with gr.Row():
-            clear_btn = gr.ClearButton(components = [chatbot], value = "清空问题")
-        submit_btn.click(lambda user_message, history: ("", history + [[user_message, None]]), inputs = [msg, chatbot], outputs = [msg, chatbot], queue = False).then(warper.query, chatbot, chatbot)
+    with gr.Row():
+      with gr.Column(scale = 4):
+        chatbot = gr.Chatbot(height = 450, show_copy_button = True)
+        msg = gr.Textbox(label = '需要问什么？')
+        with gr.Row():
+          submit_btn = gr.Button("发送")
+        with gr.Row():
+          clear_btn = gr.ClearButton(components = [chatbot], value = "清空问题")
+      submit_btn.click(lambda user_message, history: ("", history + [[user_message, None]]), inputs = [msg, chatbot], outputs = [msg, chatbot], queue = False).then(warper.query, chatbot, chatbot)
   gr.close_all()
   demo.launch(server_name = FLAGS.host, server_port = FLAGS.port)
 
