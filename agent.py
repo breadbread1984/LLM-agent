@@ -7,7 +7,7 @@ from langchain.llms import HuggingFaceEndpoint, OpenAI
 from langchain.agents import AgentType, initialize_agent, load_tools
 
 class Agent(object):
-  def __init__(self, model = 'zephyr', tools = ["google-serper", "llm-math"]):
+  def __init__(self, model = 'zephyr', tools = ["google-serper", "llm-math", "wikipedia", "arxiv"]):
     # openai is not available in china, cannot singup for an api key
     # get token from https://platform.openai.com/overview
     environ['OPENAI_API_KEY'] = 'to be filled'
