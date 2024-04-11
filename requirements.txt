@@ -6,3 +6,4 @@ langchain-openai
 langchainhub
 google-search-results
 wikipedia
+arxiv
