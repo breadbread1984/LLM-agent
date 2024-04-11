@@ -9,9 +9,12 @@ from langchain.agents import initialize_agent, load_tools
 class Agent(object):
   def __init__(self, model = 'zephyr', tools = ["google-serper", "llm-math"]):
     # openai is not available in china, cannot singup for an api key
+    # get token from https://platform.openai.com/overview
     environ['OPENAI_API_KEY'] = 'to be filled'
     environ['OPENAI_ORGANIZATION'] = 'HKQAI'
+    # get token from https://huggingface.co/
     environ['HUGGINGFACEHUB_API_TOKEN'] = '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'
+    # get token from https://serper.dev/
     environ["SERPAPI_API_KEY"] = 'd075ad1b698043747f232ec1f00f18ee0e7e8663'
     hf_model_list = {'chatglm3': 'THUDM/chatglm3-6b',
                      'llama2': 'meta-llama/Llama-2-7b-chat-hf',
