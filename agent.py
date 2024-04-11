@@ -6,8 +6,7 @@ from langchain.llms import HuggingFaceEndpoint, OpenAI
 from langchain.agents import initialize_agent, load_tools
 
 class Agent(object):
-  def __init__(self, model = 'zephyr', tools = ["google-serper", "llm-math"], device = 'cuda'):
-    assert device in {'cpu', 'cuda'}
+  def __init__(self, model = 'zephyr', tools = ["google-serper", "llm-math"]):
     environ['OPENAI_API_KEY'] = 'to be filled'
     environ['OPENAI_ORGANIZATION'] = 'HKQAI'
     environ['HUGGINGFACEHUB_API_TOKEN'] = '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'
@@ -26,5 +25,5 @@ class Agent(object):
     return self.agent_chain.run(question)
 
 if __name__ == "__main__":
-  agent = Agent(model = 'llama2i', device = 'cpu')
+  agent = Agent(model = 'chatglm3')
   print(agent.query("where does the word maelstrom come?"))
