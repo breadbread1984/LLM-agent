@@ -13,7 +13,7 @@ def add_options():
   flags.DEFINE_enum('model', default = 'llama3', enum_values = {'llama3', 'codellama'}, help = 'model to use')
 
 def main(unused_argv):
-  agent = Agent(model)
+  agent = Agent(FLAGS.model)
   def query(question, history):
     answer = agent.query(question)
     history.append((question, answer))
