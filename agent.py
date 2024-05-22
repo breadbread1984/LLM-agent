@@ -18,7 +18,7 @@ class Agent(object):
       raise Exception('unknown model!')
     tools = load_tools(tools, llm = llm, serper_api_key = 'd075ad1b698043747f232ec1f00f18ee0e7e8663')
     prompt = agent_template(tokenizer, tools)
-    #llm = llm.bind(stop = ["\nObservation"])
+    llm = llm.bind(stop = ["<|eot_id|>"])
     chain = {"input": lambda x: x["input"], "agent_scratchpad": lambda x: format_log_to_str(x["intermediate_steps"])} | prompt | llm | ReActJsonSingleInputOutputParser()
 
     memory = ConversationBufferMemory(memory_key="chat_history")
