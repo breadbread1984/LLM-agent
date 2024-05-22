@@ -35,7 +35,7 @@ class ChemKnowledgeTool(BaseTool):
       eos_token_id = [tokenizer.eos_token_id, tokenizer.convert_tokens_to_ids("<|eot_id|>")],
       use_cache = True,
     )
-  def _run(self, query: str, run_manager: Optional[CallbackManagerForToolRun]) = None) -> str:
+  def _run(self, query: str, run_manager: Optional[CallbackManagerForToolRun] = None) -> str:
     # 1) extract entities of known entity types
     results = self.neo4j.query("match (n) return distinct labels(n)")
     entity_types = [result['labels(n)'][0] for result in results]
@@ -67,4 +67,6 @@ class ChemKnowledgeTool(BaseTool):
     raise NotImplementedError("Chemistry Knowledge Graph does not suppert async!")
 
 if __name__ == "__main__":
-  pass
+  kb = ChemKnowledgeTool(password = '19841124')
+  res = kb.invoke('what is the application of sodium chloride?')
+  print(res)
