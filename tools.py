@@ -3,7 +3,7 @@
 from os import environ
 from typing import Optional, Type
 from transformers import AutoTokenizer
-from langchain,pydantic_v1 import BaseModel, Field
+from langchain.pydantic_v1 import BaseModel, Field
 from langchain.tools import BaseTool, StructuredTool, Tool, tool
 from langchain.graphs import Neo4jGraph
 from langchain_community.llms import HuggingFaceEndpoint
