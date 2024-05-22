@@ -1,9 +1,9 @@
 #!/usr/bin/python3
 
 from os import environ
-from getpass import getpass
 from langchain.memory import ConversationBufferMemory
-from langchain.agents import AgentType, initialize_agent, load_tools
+from langchain.agents import load_tools
+from langchain.agents.output_parsers import ReActJsonSingleInputOutputParser
 from models import Llama3, CodeLlama
 from prompts import agent_template
 
