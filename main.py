@@ -9,22 +9,15 @@ FLAGS = flags.FLAGS
 
 def add_options():
   flags.DEFINE_string('host', default = '0.0.0.0', help = 'host address')
-  flags.DEFINE_integer('port', default = 8880, help = 'port number')
-  flags.DEFINE_enum('model', default = 'zephyr', enum_values = {'ada001', 'babbage001', 'curie001', 'davinci001', 'davinci002', 'davinci003', 'gpt3.5', 'gpt4', 'mixtral', 'mistral', 'solar', 'llama2', 'zephyr'}, help = 'model to use')
-
-class Warper(object):
-  def __init__(self, model):
-    self.agent = Agent(model)
-  def query(self, history):
-    bot_message = self.agent.query(history[-1][0])
-    history[-1][1] = ""
-    for character in bot_message:
-      history[-1][1] += str(character)
-      time.sleep(0.03)
-      yield history
+  flags.DEFINE_integer('port', default = 8081, help = 'port number')
+  flags.DEFINE_enum('model', default = 'llama3', enum_values = {'llama3', 'codellama'}, help = 'model to use')
 
 def main(unused_argv):
-  warper = Warper(FLAGS.model)
+  agent = Agent(model)
+  def query(question, history):
+    answer = agent.query(question)
+    history.append((question, answer))
+    return "", history
   block = gr.Blocks()
   with block as demo:
     with gr.Row(equal_height = True):
@@ -38,7 +31,7 @@ def main(unused_argv):
           submit_btn = gr.Button("发送")
         with gr.Row():
           clear_btn = gr.ClearButton(components = [chatbot], value = "清空问题")
-      submit_btn.click(lambda user_message, history: ("", history + [[user_message, None]]), inputs = [msg, chatbot], outputs = [msg, chatbot], queue = False).then(warper.query, chatbot, chatbot)
+      submit_btn.click(query, inputs = [msg, chatbot], outputs = [msg, chatbot])
   gr.close_all()
   demo.launch(server_name = FLAGS.host, server_port = FLAGS.port)
 
