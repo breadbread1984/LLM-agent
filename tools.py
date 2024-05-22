@@ -23,7 +23,7 @@ def load_knowledge_graph(host = 'bolt://localhost:7687', username = 'neo4j', pas
 
   class ChemKnowledgeTool(BaseTool):
     name = "Chemistry Knowledge Graph"
-    description = 'userful for when you need to answer questions about chemistry'
+    description = 'userful when you need to answer questions about chemistry'
     args_schema: Type[BaseModel] = ChemKnowledgeInput
     return_direct: bool = True
     config: ChemKnowledgeConfig
