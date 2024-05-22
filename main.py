@@ -16,7 +16,7 @@ def main(unused_argv):
   agent = Agent(FLAGS.model)
   def query(question, history):
     answer = agent.query(question)
-    history.append((question, answer))
+    history.append((question, str(answer)))
     return "", history
   block = gr.Blocks()
   with block as demo:
