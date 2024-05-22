@@ -75,5 +75,7 @@ if __name__ == "__main__":
   print(kb.name)
   print(kb.description)
   print(kb.args)
-  res = kb('what is the application of sodium chloride?')
+  res = kb.invoke('what is the application of sodium chloride?')
+  print(res)
+  res = kb.invoke('what is deoxyribose?')
   print(res)
