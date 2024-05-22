@@ -2,7 +2,7 @@
 
 from os import environ
 from langchain.memory import ConversationBufferMemory
-from langchain.agents import load_tools
+from langchain.agents import AgentExecutor, load_tools
 from langchain.agents.output_parsers import ReActJsonSingleInputOutputParser
 from models import Llama3, CodeLlama
 from prompts import agent_template
