@@ -82,3 +82,4 @@ if __name__ == "__main__":
   print(res)
   res = kb.invoke('what is deoxyribose?')
   print(res)
+  kb.config.neo4j._driver.close()
