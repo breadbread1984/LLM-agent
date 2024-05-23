@@ -1,6 +1,7 @@
 #!/usr/bin/python3
 
-from os import environ
+from os import environ, remove
+from os.path import exists, join, isdir
 from typing import Optional, Type
 from transformers import AutoTokenizer, PreTrainedTokenizerFast
 from langchain.pydantic_v1 import BaseModel, Field
@@ -9,6 +10,7 @@ from langchain.graphs import Neo4jGraph
 from langchain_community.llms import HuggingFaceEndpoint
 from langchain.callbacks.manager import AsyncCallbackManagerForToolRun, CallbackManagerForToolRun
 from prompts import entity_generation_template, triplets_qa_template
+from reaction_path import PrecursorsRecommendation
 
 def load_knowledge_graph(host = 'bolt://localhost:7687', username = 'neo4j', password = None, database = 'neo4j'):
   class ChemKnowledgeInput(BaseModel):
@@ -73,14 +75,49 @@ def load_knowledge_graph(host = 'bolt://localhost:7687', username = 'neo4j', pas
   )
   return ChemKnowledgeTool(config = ChemKnowledgeConfig(neo4j = neo4j, tokenizer = tokenizer, llm = llm))
 
+def load_precursor_predictor(device = 'cpu'):
+  import gdown
+  import zipfile
+  if not exists('rsc') or not isdir('rsc'):
+    url = 'https://drive.google.com/uc?id=1gkZyU6TQI6c4m9lLPM2J7a9GLwRur7N6'
+    zip_path = 'rsc.zip'
+    gdown.download(url, zip_path)
+    with zipfile.ZipFile(zip_path, 'r') as f:
+      f.extractall('.')
+    remove(zip_path)
+  if not exists('reaction_path_ckpt') or not isdir('reaction_path_ckpt'):
+    url = 'https://drive.google.com/uc?id=1dDiCcWNEbsnPyKrZYXsYiOsWiLAsmii3'
+    zip_path = 'reaction_path_ckpt.zip'
+    gdown.download(url, zip_path)
+    with zipfile.ZipFile(zip_path, 'r') as f:
+      f.extractall('.')
+    remove(zip_path)
+
+  class PrecursorInput(BaseModel):
+    compound: str = Field(description = "should be the chemical formula of a compound")
+    count: int = Field(description = "should be the number of groups of precursors")
+
+  class PrecursorTool(BaseTool):
+    name = "Reaction Precursor Prediction"
+    description = 'useful when you want to guess the precursors of a compound in chemical reaction'
+    args_schema: Type[BaseModel] = PrecursorInput
+    return_direct: bool = True
+    recommend: PrecursorsRecommendation = PrecursorsRecommendation(model_dir = 'reaction_path_ckpt', data_dir = 'rsc', device = device)
+    def _run(self, compound: str, count: int, run_manager: Optional[CallbackManagerForToolRun] = None) -> list:
+      target_formula = [query]
+      all_predicts = self.recommend.call(target_formula = target_formula, top_n = count)
+      return all_predicts[0]['precursors_predicts']
+    async def _arun(self, compound: str, count: int, run_manager: Optional[AsyncCallbackManagerForToolRun] = None) -> str:
+      raise NotImplementedError("Reaction Precursor Prediction does not suppert async!")
+
+  return PrecursorTool()
+
 if __name__ == "__main__":
   kb = load_knowledge_graph(password = '19841124')
   print('name:',kb.name)
   print('description:', kb.description)
   print('args:',kb.args)
   res = kb.invoke('what is the application of sodium chloride?')
-  print(res)
-  res = kb.invoke('what is deoxyribose?')
   print(res)
   # NOTE: https://github.com/langchain-ai/langchain/discussions/15927
   kb.config.neo4j._driver.close()
