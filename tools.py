@@ -99,7 +99,7 @@ def load_precursor_predictor(device = 'cpu'):
 
   class PrecursorTool(BaseTool):
     name = "Reaction Precursor Prediction"
-    description = 'useful when you want to guess the precursors of a compound in chemical reaction'
+    description = 'useful when you want to guess the precursors of a compound in chemical reaction. each compound has mutiple groups of precursors which are stored in the return list. each group of precursors can product the target compound in a reaction. the groups are returned in descent order of possibility.'
     args_schema: Type[BaseModel] = PrecursorInput
     return_direct: bool = True
     recommend: PrecursorsRecommendation = PrecursorsRecommendation(model_dir = 'reaction_path_ckpt', data_dir = 'rsc', device = device)
