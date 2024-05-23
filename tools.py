@@ -104,7 +104,7 @@ def load_precursor_predictor(device = 'cpu'):
     return_direct: bool = True
     recommend: PrecursorsRecommendation = PrecursorsRecommendation(model_dir = 'reaction_path_ckpt', data_dir = 'rsc', device = device)
     def _run(self, compound: str, count: int, run_manager: Optional[CallbackManagerForToolRun] = None) -> list:
-      target_formula = [query]
+      target_formula = [compound]
       all_predicts = self.recommend.call(target_formula = target_formula, top_n = count)
       return all_predicts[0]['precursors_predicts']
     async def _arun(self, compound: str, count: int, run_manager: Optional[AsyncCallbackManagerForToolRun] = None) -> str:
@@ -117,7 +117,13 @@ if __name__ == "__main__":
   print('name:',kb.name)
   print('description:', kb.description)
   print('args:',kb.args)
-  res = kb.invoke('what is the application of sodium chloride?')
+  res = kb.invoke({'query': 'what is the application of sodium chloride?'})
   print(res)
   # NOTE: https://github.com/langchain-ai/langchain/discussions/15927
   kb.config.neo4j._driver.close()
+  precursor = load_precursor_predictor()
+  print('name:',precursor.name)
+  print('description:', precursor.description)
+  print('args:', precursor.args)
+  res = precursor.invoke({'compound': 'SrZnSO', 'count': 10})
+  print(res)
