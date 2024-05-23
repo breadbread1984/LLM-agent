@@ -82,4 +82,5 @@ if __name__ == "__main__":
   print(res)
   res = kb.invoke('what is deoxyribose?')
   print(res)
+  # NOTE: https://github.com/langchain-ai/langchain/discussions/15927
   kb.config.neo4j._driver.close()
