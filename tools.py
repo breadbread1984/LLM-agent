@@ -95,7 +95,7 @@ def load_precursor_predictor(device = 'cpu'):
 
   class PrecursorInput(BaseModel):
     compound: str = Field(description = "should be the chemical formula of a compound")
-    count: int = Field(description = "should be the number of groups of precursors")
+    count: int = Field(description = "should be the number of groups of precursors you want to predict")
 
   class PrecursorTool(BaseTool):
     name = "Reaction Precursor Prediction"
